@@ -8,8 +8,12 @@ import {IsBoard, isValidTransition, calculateWinner, finished} from './logic'
 import { Validate } from 'class-validator'
 import {io} from '../index'
 
-const RANDOM_WORDS = ["tree", "frog"]
-
+const RANDOM_WORDS = ['SPAIN', 'FRANCE', 'MONACO', 'ITALY', 'SLOVENIA', 'CROATIA', 'BOSNIA AND HERZEGOVINA', 'MONTENEGRO', 'ALBANIA', 'GREECE', 'TURKEY', 'SYRIA', 'LEBANON', 'ISRAEL', 'EGYPT', 'LIBYA', 'TUNISIA', 'ALGERIA', 'MOROCCO', 'MALTA', 'CYPRUS']
+const letter='ABCDEFGHIJKLMNOPRSTUVWXYZ'
+const allOrientations= ['horizontal']
+const orientation= {horizontal: function(x,y,i) { return {x: x+i, y: y  }}}
+const checkOrientation ={horizontal: function(x,y,h,w,l) { return w >= x + l}}
+const skipOrientations = {horizontal: function(x,y,l) { return {x: 0, y: y+1}}}
 const pickRandomWord = 
 
 class GameUpdate {
@@ -29,10 +33,10 @@ export default class GameController {
   async createGame(
     @CurrentUser() user: User
   ) {
-    const board = createRandomBoard()
-    const word = pickRandomWord()
-    const location = pickRandomLocation()
-    const orientation = pickRandomOrientation()
+    // const board = createRandomBoard()
+    // const word = pickRandomWord()
+    // const location = pickRandomLocation()
+    // const orientation = pickRandomOrientation()
     
 
     const entity = await Game.create().save()
@@ -140,3 +144,58 @@ export default class GameController {
   }
 }
 
+var findBestLocations = function (puzzle, options, word) {
+
+  var locations = [],
+      height = options.height,
+      width = options.width,
+      wordLength = word.length,
+      maxOverlap = 0; // we’ll start looking at overlap = 0
+
+  // loop through all of the possible orientations at this position
+  for (var k = 0, len = options.orientations.length; k < len; k++) {
+
+    var orientation = options.orientations[k],
+        check = checkOrientations[orientation],
+        next = orientations[orientation],
+        skipTo = skipOrientations[orientation],
+        x = 0, y = 0;
+
+    // loop through every position on the board
+    while( y < height ) {
+
+      // see if this orientation is even possible at this location
+      if (check(x, y, height, width, wordLength)) {
+
+        // determine if the word fits at the current position
+        var overlap = calcOverlap(word, puzzle, x, y, next);
+
+        // if the overlap was bigger than previous overlaps that we’ve seen
+        if (overlap >= maxOverlap || (!options.preferOverlap && overlap > -1)) {
+          maxOverlap = overlap;
+          locations.push({x: x, y: y, orientation: orientation, overlap: overlap});
+        }
+
+        x++;
+        if (x >= width) {
+          x = 0;
+          y++;
+        }
+      } else {
+        // if current cell is invalid, then skip to the next cell where
+        // this orientation is possible. this greatly reduces the number
+        // of checks that we have to do overall
+        var nextPossible = skipTo(x,y,wordLength);
+        x = nextPossible.x;
+        y = nextPossible.y;
+      }
+
+    }
+  }
+
+  // finally prune down all of the possible locations we found by
+  // only using the ones with the maximum overlap that we calculated
+  return options.preferOverlap ?
+         pruneLocations(locations, maxOverlap) :
+         locations;
+};
