@@ -8,8 +8,9 @@ import {IsBoard, isValidTransition, calculateWinner, finished} from './logic'
 import { Validate } from 'class-validator'
 import {io} from '../index'
 import { Router } from 'express';
+import { IndexMetadata } from 'typeorm/metadata/IndexMetadata';
 
-const RANDOM_WORDS = ['SPAIN', 'FRANCE', 'MONACO', 'ITALY', 'SLOVENIA', 'CROATIA', 'BOSNIA AND HERZEGOVINA', 'MONTENEGRO', 'ALBANIA', 'GREECE', 'TURKEY', 'SYRIA', 'LEBANON', 'ISRAEL', 'EGYPT', 'LIBYA', 'TUNISIA', 'ALGERIA', 'MOROCCO', 'MALTA', 'CYPRUS']
+const words = ['SPAIN', 'FRANCE', 'MONACO', 'ITALY', 'SLOVENIA', 'CROATIA', 'ALBANIA', 'GREECE', 'TURKEY', 'SYRIA', 'LEBANON', 'ISRAEL', 'EGYPT', 'LIBYA', 'TUNISIA', 'ALGERIA', 'MOROCCO', 'MALTA', 'CYPRUS']
 const letters=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 const allOrientations= ['horizontal']
 const orientation= {horizontal: function(x,y,i) { return {x: x+i, y: y  }}}
@@ -36,11 +37,19 @@ export default class GameController {
       for (let row = 0; row < 9; row++) {
         const row: string[] = [];
 
-        for (let column = 0; column < 9; column++) {
-          const randomLettersIndex = Math.floor(Math.random() * letters.length)
-          const randomLetter = letters[randomLettersIndex]
-          row.push(randomLetter);
-        }
+        // for (let column = 0; column < 9; column++) {
+          const randomWordIndex = Math.floor(Math.random() * words.length)
+        const randomWord = words[randomWordIndex]
+        const wordSplit = randomWord.split('');
+        for (let indexSplit = 0; indexSplit <9; indexSplit++){
+          row.push(wordSplit[indexSplit]);
+        // }
+        
+      }
+        //   const randomLettersIndex = Math.floor(Math.random() * letters.length)
+        //   const randomLetter = letters[randomLettersIndex]
+        //   row.push(randomLetter);
+        // }
 
         board.push(row)
       }
@@ -48,8 +57,14 @@ export default class GameController {
     }
     const board = createRandomBoard();
     console.log("board test:", board)
-
-    // const word = pickRandomWord()
+    function pickRandomWord(){
+      for (let column = 0; column < 9; column++) {
+        const randomWordIndex = Math.floor(Math.random() * words.length)
+        const randomWord = words[randomWordIndex]
+        row.push(randomWord.split(""));
+      }
+      const word = pickRandomWord()
+  }
     // const location = pickRandomLocation()
     // const orientation = pickRandomOrientation()
 
