@@ -12,11 +12,11 @@ import { IndexMetadata } from 'typeorm/metadata/IndexMetadata';
 
 const words = ['SPAIN', 'FRANCE', 'MONACO', 'ITALY', 'SLOVENIA', 'CROATIA', 'ALBANIA', 'GREECE', 'TURKEY', 'SYRIA', 'LEBANON', 'ISRAEL', 'EGYPT', 'LIBYA', 'TUNISIA', 'ALGERIA', 'MOROCCO', 'MALTA', 'CYPRUS']
 const letters=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-const allOrientations= ['horizontal']
-const orientation= {horizontal: function(x,y,i) { return {x: x+i, y: y  }}}
-const checkOrientation ={horizontal: function(x,y,h,w,l) { return w >= x + l}}
-const skipOrientations = {horizontal: function(x,y,l) { return {x: 0, y: y+1}}}
-const pickRandomWord = 
+// const allOrientations= ['horizontal']
+// const orientation= {horizontal: function(x,y,i) { return {x: x+i, y: y  }}}
+// const checkOrientation ={horizontal: function(x,y,h,w,l) { return w >= x + l}}
+// const skipOrientations = {horizontal: function(x,y,l) { return {x: 0, y: y+1}}}
+// const pickRandomWord = 
 
 class GameUpdate {
   @Validate(IsBoard, {
@@ -34,37 +34,42 @@ export default class GameController {
     function createRandomBoard() {
       const board: string[][] = [];
 
-      for (let row = 0; row < 9; row++) {
+      for (let rowIndex = 0; rowIndex < 9; rowIndex++) {
         const row: string[] = [];
 
-        // for (let column = 0; column < 9; column++) {
-          const randomWordIndex = Math.floor(Math.random() * words.length)
-        const randomWord = words[randomWordIndex]
-        const wordSplit = randomWord.split('');
-        for (let indexSplit = 0; indexSplit <9; indexSplit++){
-          row.push(wordSplit[indexSplit]);
-        // }
-        
-      }
-        //   const randomLettersIndex = Math.floor(Math.random() * letters.length)
-        //   const randomLetter = letters[randomLettersIndex]
-        //   row.push(randomLetter);
-        // }
+        for (let columnIndex = 0; columnIndex < 9; columnIndex++) {
+          const randomLetterIndex = Math.floor(Math.random() * letters.length)
+          const randomLetter = letters[randomLetterIndex]
+          row.push(randomLetter)
+        }
 
         board.push(row)
       }
+
       return board;
     }
+
     const board = createRandomBoard();
+
+    const randomWordIndex = Math.floor(Math.random() * words.length)
+    const word = words[randomWordIndex]
+    const randomRowIndex = Math.floor(Math.random() * board.length)
+    const row = board[randomRowIndex]
+
+    word.split("").map((letter, index) => {
+      row[index] = letter
+    })
+
     console.log("board test:", board)
-    function pickRandomWord(){
-      for (let column = 0; column < 9; column++) {
-        const randomWordIndex = Math.floor(Math.random() * words.length)
-        const randomWord = words[randomWordIndex]
-        row.push(randomWord.split(""));
-      }
-      const word = pickRandomWord()
-  }
+    
+  //   function pickRandomWord(){
+  //     for (let column = 0; column < 9; column++) {
+  //       const randomWordIndex = Math.floor(Math.random() * words.length)
+  //       const randomWord = words[randomWordIndex]
+  //       row.push(randomWord.split(""));
+  //     }
+  //     const word = pickRandomWord()
+  // }
     // const location = pickRandomLocation()
     // const orientation = pickRandomOrientation()
 
@@ -173,59 +178,3 @@ export default class GameController {
 }
 
 
-// var findBestLocations = function(puzzle, options, word) {
-//   var locations = [],
-//     height = options.height,
-//     width = options.width,
-//     wordLength = word.length,
-//     maxOverlap = 0; // we’ll start looking at overlap = 0
-
-//   // loop through all of the possible orientations at this position
-//   for (var k = 0, len = options.orientations.length; k < len; k++) {
-//     var orientation = options.orientations[k],
-//       check = checkOrientations[orientation],
-//       next = orientations[orientation],
-//       skipTo = skipOrientations[orientation],
-//       x = 0,
-//       y = 0;
-
-//     // loop through every position on the board
-//     while (y < height) {
-//       // see if this orientation is even possible at this location
-//       if (check(x, y, height, width, wordLength)) {
-//         // determine if the word fits at the current position
-//         var overlap = calcOverlap(word, puzzle, x, y, next);
-
-//         // if the overlap was bigger than previous overlaps that we’ve seen
-//         if (overlap >= maxOverlap || (!options.preferOverlap && overlap > -1)) {
-//           maxOverlap = overlap;
-//           locations.push({
-//             x: x,
-//             y: y,
-//             orientation: orientation,
-//             overlap: overlap
-//           });
-//         }
-
-//         x++;
-//         if (x >= width) {
-//           x = 0;
-//           y++;
-//         }
-//       } else {
-//         // if current cell is invalid, then skip to the next cell where
-//         // this orientation is possible. this greatly reduces the number
-//         // of checks that we have to do overall
-//         var nextPossible = skipTo(x, y, wordLength);
-//         x = nextPossible.x;
-//         y = nextPossible.y;
-//       }
-//     }
-//   }
-
-//   // finally prune down all of the possible locations we found by
-//   // only using the ones with the maximum overlap that we calculated
-//   return options.preferOverlap
-//     ? pruneLocations(locations, maxOverlap)
-//     : locations;
-// };
