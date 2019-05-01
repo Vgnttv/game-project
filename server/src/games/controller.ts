@@ -8,6 +8,10 @@ import {IsBoard, isValidTransition, calculateWinner, finished} from './logic'
 import { Validate } from 'class-validator'
 import {io} from '../index'
 
+const RANDOM_WORDS = ["tree", "frog"]
+
+const pickRandomWord = 
+
 class GameUpdate {
 
   @Validate(IsBoard, {
@@ -25,6 +29,12 @@ export default class GameController {
   async createGame(
     @CurrentUser() user: User
   ) {
+    const board = createRandomBoard()
+    const word = pickRandomWord()
+    const location = pickRandomLocation()
+    const orientation = pickRandomOrientation()
+    
+
     const entity = await Game.create().save()
 
     await Player.create({
@@ -101,9 +111,9 @@ export default class GameController {
     else if (finished(update.board)) {
       game.status = 'finished'
     }
-    else {
-      game.turn = player.symbol === 'x' ? 'o' : 'x'
-    }
+    // else {
+    //   game.turn = player.symbol === 'x' ? 'o' : 'x'
+    // }
     game.board = update.board
     await game.save()
     

@@ -65,23 +65,44 @@ function randomLetter() {
     "Y",
     "Z"
   ];
-  // let randomRow = [];
+
+
   let randomCharIndex = Math.floor(Math.random() * chars.length);
   const randomChar = chars[randomCharIndex];
   return randomChar;
 }
-let row: Row = [
-  randomLetter(),
-  randomLetter(),
-  randomLetter(),
-  randomLetter(),
-  randomLetter(),
-  randomLetter(),
-  randomLetter(),
-  randomLetter(),
-  randomLetter(),
-  randomLetter()
-];
+
+
+
+let row: Row = randomRow()
+function randomRow(){
+  for ( let i=0; i<10 ; i++){
+    return randomLetter()
+  }
+  for (let j=0; j<10; j++){
+    return 
+  }
+}
+
+// function randomRow(){
+//   for( let i=0; i<10; i++){
+//     randomLetter()
+//   }
+// }
+
+// [
+//   randomLetter(),
+//   randomLetter(),
+//   randomLetter(),
+//   randomLetter(),
+//   randomLetter(),
+//   randomLetter(),
+//   randomLetter(),
+//   randomLetter(),
+//   randomLetter(),
+//   randomLetter()
+// ] 
+
 const board: Board = [
   row,
   row,
@@ -94,6 +115,7 @@ const board: Board = [
   row,
   row
 ];
+
 @Entity()
 export class Game extends BaseEntity {
   @PrimaryGeneratedColumn()
