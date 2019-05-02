@@ -79,9 +79,9 @@ export default class GameController {
   async createGame(@CurrentUser() user: User) {
     function createRandomBoard() {
       const board: string[][] = [];
-      for (let rowIndex = 0; rowIndex < 9; rowIndex++) {
+      for (let rowIndex = 0; rowIndex < 12; rowIndex++) {
         const row: string[] = [];
-        for (let columnIndex = 0; columnIndex < 9; columnIndex++) {
+        for (let columnIndex = 0; columnIndex < 12; columnIndex++) {
           const randomLetterIndex = Math.floor(Math.random() * letters.length);
           const randomLetter = letters[randomLetterIndex];
           row.push(randomLetter);
@@ -107,7 +107,7 @@ export default class GameController {
       const randomRowIndex = Math.floor(Math.random() * board.length);
       console.log("randomRowIndex test", randomRowIndex);
       const row = board[randomRowIndex];
-      const randomColumnIndex = Math.floor(Math.random() * (9 - text.length));
+      const randomColumnIndex = Math.floor(Math.random() * (12 - text.length));
       console.log("randomColumnIndex test:", randomColumnIndex);
       text.split("").map((letter, index) => {
         row[randomColumnIndex + index] = letter;
@@ -183,7 +183,7 @@ export default class GameController {
     if (!game) throw new NotFoundError(`Game does not exist`);
 
     const player = await Player.findOne({ user, game });
-    console.log("player test:", layer)
+    console.log("player test:", player)
 
     if (!player) throw new ForbiddenError(`You are not part of this game`);
     if (game.status !== "started")

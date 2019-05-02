@@ -30,39 +30,8 @@ class GameDetails extends PureComponent {
 
     console.log("isCorrect test:", isCorrect)
 
-    // console.log("Word index 0", game.words[0].id);
     const board = game.board;
-    //.map((row, rowIndex) =>
-    // row.map((cell, cellIndex) => {
-    if (toRow === game.words[0].row && toCell === game.words[0].column) {
-      console.log("YAAAAAAAS");
-      // return game.words[0].row.style.color = red
-    }
-    if (toRow === game.words[1].row && toCell === game.words[1].column) {
-      console.log("YAAAAAAAS");
-    }
-    if (toRow === game.words[2].row && toCell === game.words[2].column) {
-      console.log("YAAAAAAAS");
-    }
-    if (toRow === game.words[3].row && toCell === game.words[3].column) {
-      console.log("YAAAAAAAS");
-    }
-    if (toRow === game.words[4].row && toCell === game.words[4].column) {
-      console.log("YAAAAAAAS");
-    }
-    if (toRow === game.words[5].row && toCell === game.words[5].column) {
-      console.log("YAAAAAAAS");
-    }
-    if (toRow === game.words[6].row && toCell === game.words[6].column) {
-      console.log("YAAAAAAAS");
-    }
-    // return game.turn
-    else {
-      console.log("NOPE");
-    }
-    // return cell
-    // })
-    // );
+  
     console.log("game test:", game);
     console.log("words test:", game.words);
 
