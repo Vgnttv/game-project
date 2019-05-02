@@ -3,7 +3,7 @@ import {
   Body, Patch 
 } from 'routing-controllers'
 import User from '../users/entity'
-import { Game, Player, Board } from './entities'
+import { Game, Player, Board, Word } from './entities'
 import {IsBoard, isValidTransition, calculateWinner, finished} from './logic'
 import { Validate } from 'class-validator'
 import {io} from '../index'
@@ -30,12 +30,11 @@ export default class GameController {
   @Post("/games")
   @HttpCode(201)
   async createGame(@CurrentUser() user: User) {
+    
     function createRandomBoard() {
       const board: string[][] = [];
-
       for (let rowIndex = 0; rowIndex < 9; rowIndex++) {
         const row: string[] = [];
-
         for (let columnIndex = 0; columnIndex < 9; columnIndex++) {
           const randomLetterIndex = Math.floor(Math.random() * letters.length);
           const randomLetter = letters[randomLetterIndex];
@@ -50,32 +49,40 @@ export default class GameController {
 
     console.log("words test: ", words);
     console.log("board test:", board);
-    function positionWord() {
-      // for (let i = 0; i < 5; i++) {
-        const randomWordIndex = Math.floor(Math.random() * words.length);
-        console.log("randomWordIndex", randomWordIndex);
-        const word = words[randomWordIndex];
-        console.log("word test:", word);
-        const randomRowIndex = Math.floor(Math.random() * board.length);
-        console.log("randomRowIndex test", randomRowIndex);
-        const row = board[randomRowIndex];
-        const randomColumnIndex = Math.floor(Math.random() * (9 - word.length));
-        const randomPosition = word.split("").map((letter, index) => {
-          row[randomColumnIndex + index] = letter;
-        });
-        return randomPosition;
-      // }
-    }
-    function start(){
-      for (let amount=0; amount<5; amount++)
-         positionWord();
-   }
-    const positionWords = start();
-    const entity = new Game();
-    entity.board = board;
 
+    const entity = new Game();
     await entity.save();
 
+    async function positionWord() {
+      const randomWordIndex = Math.floor(Math.random() * words.length);
+      console.log("randomWordIndex", randomWordIndex);
+      const text = words[randomWordIndex];
+      console.log("text test:", text)
+      const randomRowIndex = Math.floor(Math.random() * board.length);
+      console.log("randomRowIndex test", randomRowIndex);
+      const row = board[randomRowIndex];
+      const randomColumnIndex = Math.floor(Math.random() * (9 - text.length));
+      console.log("randomColumnIndex test:", randomColumnIndex)
+      text.split("").map((letter, index) => {
+        row[randomColumnIndex + index] = letter;
+      });
+
+      const word = new Word()
+      word.text = text
+      word.row = randomRowIndex
+      word.column = randomColumnIndex
+      word.game = entity
+      await word.save()
+    }
+
+    async function start(){
+      for (let amount=0; amount<7; amount++) await positionWord()
+    }
+
+    await start();
+
+    entity.board = board;
+    await entity.save();
     await Player.create({
       game: entity,
       user

@@ -1,7 +1,7 @@
 
 import React, {Component} from 'react';
 import Board from './Board';
-import Details from './Details';
+import GameDetails from './Details';
 
 /**
  * The game. Organises relevent components and handles game logic.
@@ -218,7 +218,7 @@ class Game extends React.Component {
         </div>
 
         <div className='game-details'>
-          <Details sourceWord={this.state.sourceWord} targets={this.state.targets} />
+          <GameDetails sourceWord={this.state.sourceWord} targets={this.state.targets} />
         </div>
 
       </div>

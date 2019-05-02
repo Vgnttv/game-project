@@ -14,47 +14,16 @@ export type Board = Row[]
 
 type Status = "pending" | "started" | "finished";
 
-const emptyRow: Row = ["A", "B", "F", "F", "F", "F", "F", "F", "F"];
-const emptyBoard: Board = [
-  emptyRow,
-  emptyRow,
-  emptyRow,
-  emptyRow,
-  emptyRow,
-  emptyRow,
-  emptyRow,
-  emptyRow,
-  emptyRow
-];
-// const letters=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-
-// function createRandomBoard(){
-//   const board: Array= []
-//   const row: Array= []
-//   let randomLettersIndex = Math.floor(Math.random() * letters.length);
-//   const randomLetter: string = letters[randomLettersIndex];
-//   // if (row.length === 0 ){
-//   for (let i=0; i < row.length; i++){row.push(randomLetter)
-//     // if (board.length === 0 ){
-//       for (let j=0; j < board.length; j++){board.push(row[j])
-//       };
-//     // }
-//     }
-//   // }
-// return board
-// }
-// const board: Board = createRandomBoard()
-
 @Entity()
 export class Game extends BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column("json", { default: emptyBoard })
+  @Column("json", { nullable: true })
   board: Board;
 
-  @Column("char", { length: 1, default: "X" })
-  turn: Symbol;
+  // @Column("char", { length: 1, default: "X" })
+  // turn: Symbol;
 
   @Column("char", { length: 1, nullable: true })
   winner: Symbol;
@@ -64,6 +33,9 @@ export class Game extends BaseEntity {
 
   @OneToMany(_ => Player, player => player.game, { eager: true })
   players: Player[];
+
+  @OneToMany(_ => Word, word => word.game, { eager: true })
+  words: Word[];
 }
 
 @Entity()
@@ -80,4 +52,22 @@ export class Player extends BaseEntity {
 
   @Column("integer", { name: "user_id" })
   userId: number;
+}
+
+@Entity()
+export class Word extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id?: number;
+
+  @ManyToOne(_ => Game, game => game.players)
+  game: Game;
+
+  @Column("integer")
+  row: number;
+
+  @Column("integer")
+  column: number;
+
+  @Column("text")
+  text: string;
 }

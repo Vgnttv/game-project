@@ -1,14 +1,14 @@
 import React from 'react'
 import './Board.css'
 
-const renderCel = (makeMove, rowIndex, cellIndex, symbol, hasTurn) => {
+const renderCel = (makeMove, rowIndex, cellIndex, symbol) => {
   return (
     <button
       className="board-tile"
-      disabled={hasTurn}
+      // disabled={hasTurn}
       onClick={() => makeMove(rowIndex, cellIndex)}
       key={`${rowIndex}-${cellIndex}`}
-    >{symbol || '-'}</button>
+    >{symbol}</button>
   )
 }
 

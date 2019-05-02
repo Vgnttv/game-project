@@ -1,10 +1,11 @@
 import React from 'react';
+import Square from 'Square.css'
 
 export default class Square extends React.Component{
   render(){
     const color_ = this.props.color;
     return (
-      <td
+      <td className="single-td"
         style={{
           overflow:'hidden',
           width:'50px',
@@ -16,11 +17,11 @@ export default class Square extends React.Component{
         }}
       onClick={this.props.handleClick} >
         <div
-          style={{color:color_,
+          style={{color:red,
                   border:"1px solid",
                   backgroundColor: color_,
                   borderRadius: "50%",
-                  borderColor: color_,
+                  borderColor: red,
                   height:25}} >
         </div>
       </td>
