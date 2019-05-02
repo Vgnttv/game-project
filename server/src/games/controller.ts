@@ -7,8 +7,8 @@ import { Game, Player, Board } from './entities'
 import {IsBoard, isValidTransition, calculateWinner, finished} from './logic'
 import { Validate } from 'class-validator'
 import {io} from '../index'
-import { Router } from 'express';
-import { IndexMetadata } from 'typeorm/metadata/IndexMetadata';
+// import { Router } from 'express';
+// import { IndexMetadata } from 'typeorm/metadata/IndexMetadata';
 
 const words = ['SPAIN', 'FRANCE', 'MONACO', 'ITALY', 'SLOVENIA', 'CROATIA', 'ALBANIA', 'GREECE', 'TURKEY', 'SYRIA', 'LEBANON', 'ISRAEL', 'EGYPT', 'LIBYA', 'TUNISIA', 'ALGERIA', 'MOROCCO', 'MALTA', 'CYPRUS']
 const letters=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -16,7 +16,6 @@ const letters=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
 // const orientation= {horizontal: function(x,y,i) { return {x: x+i, y: y  }}}
 // const checkOrientation ={horizontal: function(x,y,h,w,l) { return w >= x + l}}
 // const skipOrientations = {horizontal: function(x,y,l) { return {x: 0, y: y+1}}}
-
 
 class GameUpdate {
   @Validate(IsBoard, {
@@ -38,36 +37,42 @@ export default class GameController {
         const row: string[] = [];
 
         for (let columnIndex = 0; columnIndex < 9; columnIndex++) {
-          
-          const randomLetterIndex = Math.floor(Math.random() * letters.length)
-          const randomLetter = letters[randomLetterIndex]
-          row.push(randomLetter)
+          const randomLetterIndex = Math.floor(Math.random() * letters.length);
+          const randomLetter = letters[randomLetterIndex];
+          row.push(randomLetter);
         }
-        board.push(row)
+        board.push(row);
       }
       return board;
     }
 
     const board = createRandomBoard();
-    
-    console.log("words test: ", words)
-    console.log("board test:", board)
-    
-    const randomWordIndex = Math.floor(Math.random() * words.length)
-    console.log("randomWordIndex", randomWordIndex)
-    const word = words[randomWordIndex]
-    console.log("word test:", word)
-    const randomRowIndex = Math.floor(Math.random() * board.length)
-    console.log("randomRowIndex test", randomRowIndex)
-    const row = board[randomRowIndex]
-    const randomColumnIndex=Math.floor(Math.random() * (9 - word.length)) 
-   
-    word.split("").map((letter, index) => {
-       row[randomColumnIndex + index] = letter
-    })
-  
-    const entity = new Game()
-    entity.board = board
+
+    console.log("words test: ", words);
+    console.log("board test:", board);
+    function positionWord() {
+      // for (let i = 0; i < 5; i++) {
+        const randomWordIndex = Math.floor(Math.random() * words.length);
+        console.log("randomWordIndex", randomWordIndex);
+        const word = words[randomWordIndex];
+        console.log("word test:", word);
+        const randomRowIndex = Math.floor(Math.random() * board.length);
+        console.log("randomRowIndex test", randomRowIndex);
+        const row = board[randomRowIndex];
+        const randomColumnIndex = Math.floor(Math.random() * (9 - word.length));
+        const randomPosition = word.split("").map((letter, index) => {
+          row[randomColumnIndex + index] = letter;
+        });
+        return randomPosition;
+      // }
+    }
+    function start(){
+      for (let amount=0; amount<5; amount++)
+         positionWord();
+   }
+    const positionWords = start();
+    const entity = new Game();
+    entity.board = board;
 
     await entity.save();
 
@@ -101,8 +106,8 @@ export default class GameController {
 
     const player = await Player.create({
       game,
-      user,
-      symbol: "o"
+      user
+      // symbol: "o"
     }).save();
 
     io.emit("action", {
@@ -170,5 +175,3 @@ export default class GameController {
     return Game.find();
   }
 }
-
-
