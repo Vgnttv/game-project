@@ -5,12 +5,14 @@ import {
   Entity,
   Index,
   OneToMany,
-  ManyToOne
+  ManyToOne,
+  ManyToMany,
+  JoinTable
 } from "typeorm";
 import User from "../users/entity";
 
-export type Row = string[]
-export type Board = Row[]
+export type Row = string[];
+export type Board = Row[];
 
 type Status = "pending" | "started" | "finished";
 
@@ -39,7 +41,6 @@ export class Game extends BaseEntity {
 }
 
 @Entity()
-@Index(["game", "user"], { unique: true })
 export class Player extends BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number;
@@ -52,6 +53,10 @@ export class Player extends BaseEntity {
 
   @Column("integer", { name: "user_id" })
   userId: number;
+
+  @ManyToMany(() => Word, { eager: true })
+  @JoinTable()
+  words: Word[];
 }
 
 @Entity()

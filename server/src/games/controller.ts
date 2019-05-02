@@ -1,28 +1,75 @@
-import { 
-  JsonController, Authorized, CurrentUser, Post, Param, BadRequestError, HttpCode, NotFoundError, ForbiddenError, Get, 
-  Body, Patch 
-} from 'routing-controllers'
-import User from '../users/entity'
-import { Game, Player, Board, Word } from './entities'
-import {IsBoard, isValidTransition, calculateWinner, finished} from './logic'
-import { Validate } from 'class-validator'
-import {io} from '../index'
+import {
+  JsonController,
+  Authorized,
+  CurrentUser,
+  Post,
+  Param,
+  BadRequestError,
+  HttpCode,
+  NotFoundError,
+  ForbiddenError,
+  Get,
+  Body,
+  Patch
+} from "routing-controllers";
+import User from "../users/entity";
+import { Game, Player, Board, Word } from "./entities";
+import { io } from "../index";
 // import { Router } from 'express';
 // import { IndexMetadata } from 'typeorm/metadata/IndexMetadata';
 
-const words = ['SPAIN', 'FRANCE', 'MONACO', 'ITALY', 'SLOVENIA', 'CROATIA', 'ALBANIA', 'GREECE', 'TURKEY', 'SYRIA', 'LEBANON', 'ISRAEL', 'EGYPT', 'LIBYA', 'TUNISIA', 'ALGERIA', 'MOROCCO', 'MALTA', 'CYPRUS']
-const letters=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+const words = [
+  "SPAIN",
+  "FRANCE",
+  "MONACO",
+  "ITALY",
+  "SLOVENIA",
+  "CROATIA",
+  "ALBANIA",
+  "GREECE",
+  "TURKEY",
+  "SYRIA",
+  "LEBANON",
+  "ISRAEL",
+  "EGYPT",
+  "LIBYA",
+  "TUNISIA",
+  "ALGERIA",
+  "MOROCCO",
+  "MALTA",
+  "CYPRUS"
+];
+const letters = [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K",
+  "L",
+  "M",
+  "N",
+  "O",
+  "P",
+  "R",
+  "S",
+  "T",
+  "U",
+  "V",
+  "W",
+  "X",
+  "Y",
+  "Z"
+];
 // const allOrientations= ['horizontal']
 // const orientation= {horizontal: function(x,y,i) { return {x: x+i, y: y  }}}
 // const checkOrientation ={horizontal: function(x,y,h,w,l) { return w >= x + l}}
 // const skipOrientations = {horizontal: function(x,y,l) { return {x: 0, y: y+1}}}
-
-class GameUpdate {
-  @Validate(IsBoard, {
-    message: "Not a valid board"
-  })
-  board: Board;
-}
 
 @JsonController()
 export default class GameController {
@@ -30,7 +77,6 @@ export default class GameController {
   @Post("/games")
   @HttpCode(201)
   async createGame(@CurrentUser() user: User) {
-    
     function createRandomBoard() {
       const board: string[][] = [];
       for (let rowIndex = 0; rowIndex < 9; rowIndex++) {
@@ -57,26 +103,26 @@ export default class GameController {
       const randomWordIndex = Math.floor(Math.random() * words.length);
       console.log("randomWordIndex", randomWordIndex);
       const text = words[randomWordIndex];
-      console.log("text test:", text)
+      console.log("text test:", text);
       const randomRowIndex = Math.floor(Math.random() * board.length);
       console.log("randomRowIndex test", randomRowIndex);
       const row = board[randomRowIndex];
       const randomColumnIndex = Math.floor(Math.random() * (9 - text.length));
-      console.log("randomColumnIndex test:", randomColumnIndex)
+      console.log("randomColumnIndex test:", randomColumnIndex);
       text.split("").map((letter, index) => {
         row[randomColumnIndex + index] = letter;
       });
 
-      const word = new Word()
-      word.text = text
-      word.row = randomRowIndex
-      word.column = randomColumnIndex
-      word.game = entity
-      await word.save()
+      const word = new Word();
+      word.text = text;
+      word.row = randomRowIndex;
+      word.column = randomColumnIndex;
+      word.game = entity;
+      await word.save();
     }
 
-    async function start(){
-      for (let amount=0; amount<7; amount++) await positionWord()
+    async function start() {
+      for (let amount = 0; amount < 7; amount++) await positionWord();
     }
 
     await start();
@@ -86,7 +132,6 @@ export default class GameController {
     await Player.create({
       game: entity,
       user
-      // symbol: 'x'
     }).save();
 
     const game = await Game.findOneById(entity.id);
@@ -114,7 +159,6 @@ export default class GameController {
     const player = await Player.create({
       game,
       user
-      // symbol: "o"
     }).save();
 
     io.emit("action", {
@@ -133,41 +177,42 @@ export default class GameController {
   async updateGame(
     @CurrentUser() user: User,
     @Param("id") gameId: number,
-    @Body() update: GameUpdate
+    @Body() position: number[]
   ) {
     const game = await Game.findOneById(gameId);
     if (!game) throw new NotFoundError(`Game does not exist`);
 
     const player = await Player.findOne({ user, game });
+    console.log("player test:", layer)
 
     if (!player) throw new ForbiddenError(`You are not part of this game`);
     if (game.status !== "started")
       throw new BadRequestError(`The game is not started yet`);
-    if (player.symbol !== game.turn)
-      throw new BadRequestError(`It's not your turn`);
-    if (!isValidTransition(player.symbol, game.board, update.board)) {
-      throw new BadRequestError(`Invalid move`);
+
+    const [rowIndex, columnIndex] = position;
+
+    const correctWord = game.words.find(word => {
+      return word.row === rowIndex && word.column === columnIndex;
+    });
+    console.log("correctWord test:", correctWord);
+
+    if (correctWord) {
+
+      player.words.push(correctWord);
+      await player.save()
     }
 
-    const winner = calculateWinner(update.board);
-    if (winner) {
-      game.winner = winner;
-      game.status = "finished";
-    } else if (finished(update.board)) {
-      game.status = "finished";
-    }
-    // else {
-    //   game.turn = player.symbol === 'x' ? 'o' : 'x'
-    // }
-    game.board = update.board;
-    await game.save();
+    const newGame = await Game.findOneById(gameId);
+    if (!newGame) throw new NotFoundError(`Game does not exist`);
+
+    console.log("newGame test:", newGame);
 
     io.emit("action", {
       type: "UPDATE_GAME",
-      payload: game
+      payload: newGame
     });
 
-    return game;
+    return newGame;
   }
 
   @Authorized()
