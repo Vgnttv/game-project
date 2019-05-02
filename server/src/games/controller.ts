@@ -16,7 +16,7 @@ const letters=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
 // const orientation= {horizontal: function(x,y,i) { return {x: x+i, y: y  }}}
 // const checkOrientation ={horizontal: function(x,y,h,w,l) { return w >= x + l}}
 // const skipOrientations = {horizontal: function(x,y,l) { return {x: 0, y: y+1}}}
-// const pickRandomWord = 
+
 
 class GameUpdate {
   @Validate(IsBoard, {
@@ -38,43 +38,37 @@ export default class GameController {
         const row: string[] = [];
 
         for (let columnIndex = 0; columnIndex < 9; columnIndex++) {
+          
           const randomLetterIndex = Math.floor(Math.random() * letters.length)
           const randomLetter = letters[randomLetterIndex]
           row.push(randomLetter)
         }
-
         board.push(row)
       }
-
       return board;
     }
 
     const board = createRandomBoard();
-
-    const randomWordIndex = Math.floor(Math.random() * words.length)
-    const word = words[randomWordIndex]
-    const randomRowIndex = Math.floor(Math.random() * board.length)
-    const row = board[randomRowIndex]
-
-    word.split("").map((letter, index) => {
-      row[index] = letter
-    })
-
+    
+    console.log("words test: ", words)
     console.log("board test:", board)
     
-  //   function pickRandomWord(){
-  //     for (let column = 0; column < 9; column++) {
-  //       const randomWordIndex = Math.floor(Math.random() * words.length)
-  //       const randomWord = words[randomWordIndex]
-  //       row.push(randomWord.split(""));
-  //     }
-  //     const word = pickRandomWord()
-  // }
-    // const location = pickRandomLocation()
-    // const orientation = pickRandomOrientation()
-
+    const randomWordIndex = Math.floor(Math.random() * words.length)
+    console.log("randomWordIndex", randomWordIndex)
+    const word = words[randomWordIndex]
+    console.log("word test:", word)
+    const randomRowIndex = Math.floor(Math.random() * board.length)
+    console.log("randomRowIndex test", randomRowIndex)
+    const row = board[randomRowIndex]
+    const randomColumnIndex=Math.floor(Math.random() * (9 - word.length)) 
+   
+    word.split("").map((letter, index) => {
+       row[randomColumnIndex + index] = letter
+    })
+  
     const entity = new Game()
     entity.board = board
+
     await entity.save();
 
     await Player.create({
