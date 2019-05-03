@@ -59,6 +59,7 @@ class GamesList extends PureComponent {
 
     if (games === null || users === null) return null
 
+    
     return (<Paper className="outer-paper">
       <Button
         color="primary"

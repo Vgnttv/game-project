@@ -56,22 +56,20 @@ class GameDetails extends PureComponent {
     const player = game.players.find(p => p.userId === userId);
 
     const winner = game.players
-      .filter(p => p.symbol === game.winner)
+      .filter(p => p.game.words >= 5 === game.winner)
       .map(p => p.userId)[0];
-
     return (
       <Paper className="outer-paper">
         <div className="board">
           <div className="instructions">
             <h1 className="h1">Game #{game.id}</h1>
-
+            <p className="instructionsList">Status: {game.status} </p>
+            {/* User: {game.players[0].userId} vs {game.players[1].userId} */}
             <ul className="instructionsList">
               <li>There are seven hidden Simpson's related words</li>
               <li>Click on their first letter </li>{" "}
               <li>May the fastest player win </li>
             </ul>
-
-            {/* <p>Status: {game.status}</p> */}
           </div>
 
           {game.status === "pending" &&
@@ -84,11 +82,11 @@ class GameDetails extends PureComponent {
           <hr />
 
           {game.status !== "pending" && (
-          <Animated
-            animationIn="bounceInLeft"
-            animationOut="fadeOut"
-            isVisible={true}
-          >
+            <Animated
+              animationIn="bounceInLeft"
+              animationOut="fadeOut"
+              isVisible={true}
+            >
               <Board
                 className="Board"
                 board={game.board}

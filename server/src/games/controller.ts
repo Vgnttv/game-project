@@ -189,7 +189,7 @@ export default class GameController {
     if (!game) throw new NotFoundError(`Game does not exist`);
 
     const player = await Player.findOne({ user, game });
-    console.log("player test:", player)
+    console.log("player test:", player);
 
     if (!player) throw new ForbiddenError(`You are not part of this game`);
     if (game.status !== "started")
@@ -203,9 +203,14 @@ export default class GameController {
     console.log("correctWord test:", correctWord);
 
     if (correctWord) {
-
       player.words.push(correctWord);
-      await player.save()
+
+      if (player.words.length >= 5) {
+        game.status = "finished";
+        game.winner = player
+        await game.save();
+      }
+      await player.save();
     }
 
     const newGame = await Game.findOneById(gameId);
