@@ -75,6 +75,7 @@ class GameDetails extends PureComponent {
               </ul>
             </div>
           )}
+
           {winner && (
             <Animated
               className="winner"
@@ -99,15 +100,17 @@ class GameDetails extends PureComponent {
 
           {game.status !== "pending" && (
             <Animated
+              className="Board"
               animationIn="bounceInLeft"
               animationOut="fadeOut"
               isVisible={true}
             >
-              <Board
-                className="Board"
-                board={game.board}
-                makeMove={this.makeMove}
-              />
+              <ul className="WordList">
+                {game.words.map(word => {
+                  return <p key={word.id}>{word.text}</p>;
+                })}
+              </ul>
+              <Board board={game.board} makeMove={this.makeMove} />
             </Animated>
           )}
         </div>
