@@ -37,7 +37,7 @@ const words = [
   "DOH",
   "SPIDERPIG",
   "SKINNER",
-  "CYPRUS",
+
   "RALPH",
   "BARNEY",
   "GROENING",
@@ -202,16 +202,25 @@ export default class GameController {
     });
     console.log("correctWord test:", correctWord);
 
+   
     if (correctWord) {
       player.words.push(correctWord);
 
       if (player.words.length >= 5) {
         game.status = "finished";
-        game.winner = player
+        
         await game.save();
       }
       await player.save();
     }
+
+    const winner = game.players
+    if(player.words.length >= 5){
+      await player.userId
+      
+    }
+    console.log("WINNER", winner)
+
 
     const newGame = await Game.findOneById(gameId);
     if (!newGame) throw new NotFoundError(`Game does not exist`);

@@ -66,7 +66,7 @@ class GameDetails extends PureComponent {
           <div className="instructions">
             <h1 className="h1">Game #{game.id}</h1>
             <p className="instructionsList">Status: {game.status} </p>
-            {/* User: {game.players[0].userId} vs {game.players[1].userId} */}
+            User: {game.winner} 
             <ul className="instructionsList">
               <li>There are seven hidden Simpson's related words</li>
               <li>Click on their first letter </li>{" "}
