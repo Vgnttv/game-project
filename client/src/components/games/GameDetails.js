@@ -88,6 +88,10 @@ class GameDetails extends PureComponent {
               <h1 className="instructionsList">Winner: User {winner.userId}</h1>
               <p className="instructionsList">Status: {game.status} </p>
               {/* </div> */}
+              <img
+                className="gif"
+                src="https://media.giphy.com/media/l0G18ZtB6c6PJjmlW/giphy.gif"
+              />
             </Animated>
           )}
 
@@ -98,7 +102,7 @@ class GameDetails extends PureComponent {
 
           <hr />
 
-          {game.status !== "pending" && (
+          {!winner && game.status !== "pending" &&  (
             <Animated
               className="Board"
               animationIn="bounceInLeft"
