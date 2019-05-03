@@ -64,27 +64,28 @@
 .WordList {
   color: rgb(16, 16, 116);
   float: right;
-  margin-top: 5em;
+  margin-top: 3em;
   margin-right: 18em;
   background-color: rgba(255, 255, 255, 0.5);
+  font-size: 1.6em;
   /* background: linear-gradient(90deg, rgba(2,0,0,0) 0%, rgba(247,246,246,0) 0%, rgba(198,239,248,0) 58%, rgba(158,234,249,0) 72%, rgba(0,212,255,0) 100%); */
   text-align: left;
   align-content: center;
-  height: 25em;
+  height: 20em;
   width: 7em;
-  font-family: "Rock Salt", cursive;
+  font-family: "Simpsonfont";
   font-weight: 200;
 }
 
 .h1 {
   font-size: 1.35em;
   font-weight: 300;
-  font-family: "Rock Salt", cursive;
+  font-family: "Simpsonfont";
 }
 .instructionsList {
   font-weight: 200;
   font-size: 0.9em;
-  font-family: "Rock Salt", cursive;
+  font-family: "Simpsonfont";
 }
 
 .gif {

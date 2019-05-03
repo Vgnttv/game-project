@@ -15,7 +15,7 @@ const TopBar = (props) => {
 
   return (
     <AppBar className="AppBar" position="absolute" style={{zIndex:10}}>
-      <Toolbar>
+      <Toolbar className="Toolbar" >
         <Typography className="Typography" variant="title" color="inherit" style={{flex: 1}}>
           Find the Simpson's
         </Typography>

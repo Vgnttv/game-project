@@ -6,7 +6,7 @@
   border-radius: 20%;
   font-size: 1.5vw;
   margin: 0.08em;
-  font-family: "Rock Salt", cursive;
+  font-family: "Simpsonfont";
 }
 .board-tile:hover {
   transform: scale(1.1);
