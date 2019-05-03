@@ -7,6 +7,7 @@ import { userId } from "../../jwt";
 import Paper from "@material-ui/core/Paper";
 import Board from "./Board";
 import "./GameDetails.css";
+import { Animated } from "react-animated-css";
 
 class GameDetails extends PureComponent {
   componentWillMount() {
@@ -28,10 +29,16 @@ class GameDetails extends PureComponent {
       return word.row === toRow && word.column === toCell;
     });
 
-    console.log("isCorrect test:", isCorrect)
+    // if (isCorrect === true) {
+    //   return isHighlighted
+    // } else {
+    //   return false
+    // }
 
-    const board = game.board;
-  
+    console.log("isCorrect test:", isCorrect);
+
+    // const board = game.board;
+
     console.log("game test:", game);
     console.log("words test:", game.words);
 
@@ -54,26 +61,42 @@ class GameDetails extends PureComponent {
 
     return (
       <Paper className="outer-paper">
-        <h1>Game #{game.id}</h1>
+        <div className="board">
+          <div className="instructions">
+            <h1 className="h1">Game #{game.id}</h1>
 
-        <p>Status: {game.status}</p>
-        <ul>
-          <li>Click on the first letter of the words in the list</li>{" "}
-          <li>try to find the most words in 1 minute </li>
-        </ul>
+            <ul className="instructionsList">
+              <li>There are seven hidden Simpson's related words</li>
+              <li>Click on their first letter </li>{" "}
+              <li>May the fastest player win </li>
+            </ul>
 
-        {game.status === "pending" &&
-          game.players.map(p => p.userId).indexOf(userId) === -1 && (
-            <button onClick={this.joinGame}>Join Game</button>
+            {/* <p>Status: {game.status}</p> */}
+          </div>
+
+          {game.status === "pending" &&
+            game.players.map(p => p.userId).indexOf(userId) === -1 && (
+              <button onClick={this.joinGame}>Join Game</button>
+            )}
+
+          {winner && <p>Winner: {users[winner].firstName}</p>}
+
+          <hr />
+
+          {game.status !== "pending" && (
+          <Animated
+            animationIn="bounceInLeft"
+            animationOut="fadeOut"
+            isVisible={true}
+          >
+              <Board
+                className="Board"
+                board={game.board}
+                makeMove={this.makeMove}
+              />
+            </Animated>
           )}
-
-        {winner && <p>Winner: {users[winner].firstName}</p>}
-
-        <hr />
-
-        {game.status !== "pending" && (
-          <Board board={game.board} makeMove={this.makeMove} />
-        )}
+        </div>
       </Paper>
     );
   }

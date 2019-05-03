@@ -7,15 +7,17 @@ import {withRouter} from 'react-router'
 import {userId} from '../../jwt'
 import {connect} from 'react-redux'
 import AccountIcon from '@material-ui/icons/AccountBox'
+import './TopBar.css'
+
 
 const TopBar = (props) => {
   const { location, history, user } = props
 
   return (
-    <AppBar position="absolute" style={{zIndex:10}}>
+    <AppBar className="AppBar" position="absolute" style={{zIndex:10}}>
       <Toolbar>
-        <Typography variant="title" color="inherit" style={{flex: 1}}>
-          Words Find Game
+        <Typography className="Typography" variant="title" color="inherit" style={{flex: 1}}>
+          Find the Simpson's
         </Typography>
         {
           user &&

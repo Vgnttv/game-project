@@ -1,6 +1,45 @@
-.outer-paper {
-  margin-top: 20px;
+.outer-paper{
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+.instructions {
+  /* margin-top: 20px;
   margin: auto;
   padding: 20px;
-  width: 60%;
+  width: 60%; */
+  background-color: rgb(16, 16, 116);
+  color: rgb(255, 238, 0);
+  width: 100%;
+  /* image: url("https://media.giphy.com/media/Q1aRmd8e90WIw/giphy.gif") */
+}
+
+.board{
+  background-image: url("https://img.jakpost.net/c/2016/11/07/2016_11_07_15475_1478503843._large.jpg");
+  /* background-image: url("https://i.pinimg.com/originals/25/59/8d/25598d99f4d02f36425912b5de5dd475.jpg"); */
+  /* background-image: url("https://wallpaperstock.net/wallpapers/thumbs1/36567wide.jpg"); */
+  /* background-image: url("https://stmed.net/sites/default/files/the-simpsons-wallpapers-31727-1153554.jpg"); */
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 1.7em;
+  /* padding-top: 5em; */
+  animation: animatebottom 1.0s;
+}
+
+.h1{
+  font-size: 1.35em;
+  font-weight: 300;
+  font-family: "Rock Salt", cursive;;
+}
+.instructionsList{
+  font-weight: 200;
+  font-size: 0.9em;
+  font-family: "Rock Salt", cursive;;
 }

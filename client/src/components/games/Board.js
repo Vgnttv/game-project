@@ -3,8 +3,11 @@ import './Board.css'
 
 const renderCel = (makeMove, rowIndex, cellIndex, symbol) => {
   return (
+    //const isHighlited = if logic
+
     <button
       className="board-tile"
+      // className={`board-tile${isHighlighted ? " highlight " : null}`}
       // disabled={hasTurn}
       onClick={() => makeMove(rowIndex, cellIndex)}
       key={`${rowIndex}-${cellIndex}`}
