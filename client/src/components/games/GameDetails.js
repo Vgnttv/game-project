@@ -53,11 +53,13 @@ class GameDetails extends PureComponent {
     if (game === null || users === null) return "Loading...";
     if (!game) return "Not found";
 
-    const player = game.players.find(p => p.userId === userId);
+    
+    const player = game.players.find(p => p.userId === userId)
 
     const winner = game.players
-      .filter(p => p.game.words >= 5 === game.winner)
-      .map(p => p.userId)[0];
+      .filter(p => p.symbol === game.winner)
+      .map(p => p.userId)[0]
+
     return (
       <Paper className="outer-paper">
         <div className="board">
@@ -70,6 +72,8 @@ class GameDetails extends PureComponent {
               <li>Click on their first letter </li>{" "}
               <li>May the fastest player win </li>
             </ul>
+
+            {/* <p>Status: {game.status}</p> */}
           </div>
 
           {game.status === "pending" &&
@@ -77,16 +81,16 @@ class GameDetails extends PureComponent {
               <button onClick={this.joinGame}>Join Game</button>
             )}
 
-          {winner && <p>Winner: {users[winner].firstName}</p>}
+          {/* {winner && <p>Winner: {users[winner].firstName}</p>} */}
 
           <hr />
 
           {game.status !== "pending" && (
-            <Animated
-              animationIn="bounceInLeft"
-              animationOut="fadeOut"
-              isVisible={true}
-            >
+          <Animated
+            animationIn="bounceInLeft"
+            animationOut="fadeOut"
+            isVisible={true}
+          >
               <Board
                 className="Board"
                 board={game.board}

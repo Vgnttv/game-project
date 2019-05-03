@@ -28,7 +28,7 @@ export class Game extends BaseEntity {
   // turn: Symbol;
 
   @Column("char", { length: 1, nullable: true })
-  winner: Player;
+  winner: Symbol;
 
   @Column("text", { default: "pending" })
   status: Status;
