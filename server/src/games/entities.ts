@@ -24,12 +24,6 @@ export class Game extends BaseEntity {
   @Column("json", { nullable: true })
   board: Board;
 
-  // @Column("char", { length: 1, default: "X" })
-  // turn: Symbol;
-
-  @Column("char", { length: 1, nullable: true })
-  winner: Symbol;
-
   @Column("text", { default: "pending" })
   status: Status;
 
@@ -57,6 +51,9 @@ export class Player extends BaseEntity {
   @ManyToMany(() => Word, { eager: true })
   @JoinTable()
   words: Word[];
+
+  @Column("boolean", { default: false })
+  winner: boolean;
 }
 
 @Entity()

@@ -13,6 +13,17 @@
   width: 100%;
   /* image: url("https://media.giphy.com/media/Q1aRmd8e90WIw/giphy.gif") */
 }
+.winner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: rgb(16, 16, 116);
+  color: rgb(255, 238, 0);
+  width: 100%;
+  /* image: url("https://media.giphy.com/media/Q1aRmd8e90WIw/giphy.gif") */
+}
 
 .board{
   background-image: url("https://img.jakpost.net/c/2016/11/07/2016_11_07_15475_1478503843._large.jpg");

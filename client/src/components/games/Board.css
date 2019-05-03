@@ -11,8 +11,9 @@
 .board-tile:hover {
   transform: scale(1.1);
   /* background-color: rgb(255, 208, 0); */
+  margin: 0.1em;
   border-radius: 20%;
-  font-size: 1.6vw;
+  /* font-size: 1.6vw; */
   font-weight: bold;
 }
 
