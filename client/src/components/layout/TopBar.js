@@ -17,7 +17,7 @@ const TopBar = (props) => {
     <AppBar className="AppBar" position="absolute" style={{zIndex:10}}>
       <Toolbar className="Toolbar" >
         <Typography className="Typography" variant="title" color="inherit" style={{flex: 1}}>
-          Find the Simpson's
+          <h1>Find the Simpson's</h1>
         </Typography>
         {
           user &&

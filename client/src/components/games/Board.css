@@ -1,7 +1,7 @@
 .board-tile {
   height: 3.4vw;
   width: 3.4vw;
-  background-color: rgb(255, 238, 0);
+  background-color: rgb(255, 204, 0);
   color: rgb(16, 16, 116);
   border-radius: 20%;
   font-size: 1.5vw;
@@ -9,8 +9,9 @@
   font-family: "Simpsonfont";
 }
 .board-tile:hover {
-  transform: scale(1.1);
-  /* background-color: rgb(255, 208, 0); */
+  transform: scale(1.2);
+  background-color: rgb(16, 16, 116);
+  color: rgb(255, 204, 0);
   margin: 0.1em;
   border-radius: 20%;
   /* font-size: 1.6vw; */
